@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sp3</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/hls.js/8.0.0-beta.3/hls.min.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #player{
+            width: 100vw;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="input-div">
+        <form method="post" id="str-post">
+            <input type="text" value="
+https://v8.dious.cc/20230120/qUS48R4M/index.m3u8" name="url" placeholder="请输入m3u8播放地址" autocomplete="off">
+            <button type="submit">播放</button>
+        </form>
+    </div>
+    <video id="player" controls=""></video>
+    <script>
+        function playM3u8(url){
+            if(Hls.isSupported()) {
+                var video = document.getElementById('player');
+                video.volume = 1.0;
+                var hls = new Hls();
+                var m3u8Url = decodeURIComponent(url)
+                hls.loadSource(m3u8Url);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED,function() {
+                    video.play();
+                });
+            }
+        }
+        $("#str-post").submit(function () {
+            $("html,body").animate({
+                scrollTop: $(".input-div").offset().top - 20
+            }, 200);
+            playM3u8($("#str-post").serializeArray()[0].value);
+            return false;
+        })
+    </script>
+</body>
+</html>

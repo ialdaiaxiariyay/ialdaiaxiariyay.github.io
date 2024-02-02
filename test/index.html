@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Video Player</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="video-container">
+        <video id="video" class="video-player">
+            <!-- 视频源可以通过JavaScript动态设置 -->
+        </video>
+        <div class="video-controls">
+            <button id="playPauseBtn" class="control-btn">Play</button>
+            <input type="range" id="progressBar" class="progress-bar" min="0" max="100" step="0.1" value="0">
+            <select id="speedSelector" class="speed-selector">
+                <option value="0.5">0.5x</option>
+                <option value="1" selected>1x</option>
+                <option value="1.5">1.5x</option>
+                <option value="2">2x</option>
+            </select>
+            <button id="fullscreenBtn" class="control-btn">Fullscreen</button>
+        </div>
+        <input type="text" id="videoUrl" class="video-url" placeholder="Enter video URL">
+        <button id="loadVideoBtn" class="load-video-btn">Load Video</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

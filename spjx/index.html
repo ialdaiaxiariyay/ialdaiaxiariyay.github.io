@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>m3u8</title>
+    <script src="min.js"></script>
+    <script src="hlsmin.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #player{
+            width: 98vw;
+            height: 70vw;
+        }
+    </style>
+</head>
+<body>
+    <div class="input-div">
+        <form method="post" id="str-post">
+<h1>由ialdaiaxiariyay制作的m3u8播放器<h1>
+            <input type="text" value="" name="url" placeholder="请输入m3u8播放地址址址址址址址址址址址址址址址址址址址址址" autocomplete="off">
+            <button type="submit">播放</button>
+        </form>
+    </div>
+    <video id="player" controls=""></video>
+    <script>
+        function playM3u8(url){
+            if(Hls.isSupported()) {
+                var video = document.getElementById('player');
+                video.volume = 1.0;
+                var hls = new Hls();
+                var m3u8Url = decodeURIComponent(url)
+                hls.loadSource(m3u8Url);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED,function() {
+                    video.play();
+                });
+            }
+        }
+        $("#str-post").submit(function () {
+            $("html,body").animate({
+                scrollTop: $(".input-div").offset().top - 20
+            }, 200);
+            playM3u8($("#str-post").serializeArray()[0].value);
+            return false;
+        })
+    </script>
+</body>
+</html>
