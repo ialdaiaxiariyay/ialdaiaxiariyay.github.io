@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Gallery</title>
+    <style>
+        #imageGallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        img {
+            margin: 10px;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="imageGallery"></div>
+    <script>
+        // 图片的 URL 数组
+        let imageUrls = [
+            '1.jpg',
+            '2.jpg',
+            '3.jpg',
+            '4.jpg',
+            '5.jpg',
+            '6.jpg',
+            '7.jpg',
+            // 添加更多图片的 URL...
+        ];
+
+        for (let url of imageUrls) {
+            let img = document.createElement('img');
+            img.src = url;
+            img.onload = function() {
+                document.getElementById('imageGallery').appendChild(img);
+            }
+        }
+    </script>
+</body>
+</html>
