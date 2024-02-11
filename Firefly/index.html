@@ -19,6 +19,7 @@
         <audio id="backgroundMusic" loop>
         <source src="https://www.ialdaiaxiariyay.top/rykxmyas.mp3" type="audio/mpeg">
         </audio>
+        <button onclick="document.getElementById('backgroundMusic').play()">Play Music</button>
     <div id="imageGallery"></div>
     <script>
         // 图片的 URL 数组
@@ -38,7 +39,7 @@
             let img = document.createElement('img');
             img.src = url;
             img.onload = function() {
-                document.getElementById('imageGallery').appendChild(img);
+                //document.getElementById('imageGallery').appendChild(img);
             }
         }
         document.getElementById('backgroundMusic').play();
