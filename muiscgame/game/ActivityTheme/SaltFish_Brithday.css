@@ -1,0 +1,38 @@
+/* 将颜色填充上 */
+#line1 .circle,
+#line1 .move,
+#line1 .judgment,
+#line1 .btnOn {
+    background-color: #0263ff !important;
+}
+#line2 .circle,
+#line2 .move,
+#line2 .judgment,
+#line2 .btnOn {
+    background-color: #00C4FF !important;
+}
+#line3 .circle,
+#line3 .move,
+#line3 .judgment,
+#line3 .btnOn {
+    background-color: #475d85 !important;
+}
+#line4 .circle,
+#line4 .move,
+#line4 .judgment,
+#line4 .btnOn {
+    background-color: #463aeb !important;
+}
+
+#line1 {
+    border-color: #0263ff !important;
+}
+#line2 {
+    border-color: #00C4FF !important;
+}
+#line3 {
+    border-color: #475d85 !important;
+}
+#line4 {
+    border-color: #463aeb !important;
+}

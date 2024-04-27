@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>判断音符是否击中</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        .line {
+            float: left;
+            height: calc(100vh);
+            border-right: 10px solid black;
+            width: 10px;
+            margin-top: 0;
+            padding-top: 0;
+            margin-left: 19%;
+            box-sizing: border-box;
+            text-align: center;
+            position: relative;
+        }
+        .lineClass {
+            height: calc(100vh);
+            width: 80%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .circle,
+        .move {
+            background-color: black;
+            width: 30px;
+            height: 30px;
+            
+            border-radius: 15px;
+            position: relative;
+            left: -10px;
+            top: 0;
+            transition: top 1s linear;
+        }
+        .line .move {
+            top: 100%;
+            transition: top 1s linear;
+        }
+        
+        #line1 .circle,
+        #line1 .move,
+        #line1 .judgment,
+        #line1 .btnOn {
+            background-color: #FF8000;
+        }
+        #line2 .circle,
+        #line2 .move,
+        #line2 .judgment,
+        #line2 .btnOn {
+            background-color: #5893ED;
+        }
+        #line3 .circle,
+        #line3 .move,
+        #line3 .judgment,
+        #line3 .btnOn {
+            background-color: #F4E624;
+        }
+        #line4 .circle,
+        #line4 .move,
+        #line4 .judgment,
+        #line4 .btnOn {
+            background-color: #3FCD16;
+        }
+
+        .judgment,
+        .btnOn {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            bottom: 5%;
+            background-color: black;
+            left: -25px;
+            border-radius: 30px;
+            transition: all 0.1s;
+        }
+        .judgment:active {
+            transform: scale(1.5,1.5);
+        }
+        .btnOn {
+            transform: scale(1.5,1.5);
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="lineClass">
+        <div class="line" id="line1" style="border-color: #FF8000;">
+            <div class="circle"></div>
+            <div class="judgment"></div>
+        </div>
+        <div class="line" id="line2" style="border-color: #5893ED;">
+            <div class="circle"></div>
+            <div class="judgment"></div>
+        </div>
+        <div class="line" id="line3" style="border-color: #F4E624;">
+            <div class="circle"></div>
+            <div class="judgment"></div>
+        </div>
+        <div class="line" id="line4" style="border-color: #3FCD16;">
+            <div class="circle"></div>
+            <div class="judgment"></div>
+        </div>
+        
+    </div>
+    <script>
+        // 获取元素
+        var lines = document.querySelectorAll(".line");
+        var round = document.querySelectorAll(".circle");
+        var judgment = document.querySelectorAll(".judgment");
+        var startTime;
+
+        // 生成音符
+        setTimeout(function() {
+            round[0].className = "move";
+            startTime = new Date().getTime();
+            setTimeout(function() {
+                if (nowTime[0] != undefined) {
+                    if (nowTime[0] - startTime <= 1500 && nowTime[0] - startTime >= 500) {
+                        console.log("命中");
+                        round[0].style.display = "none";
+                    } else {
+                        console.log("miss");
+                        
+                    }
+                } else {
+                    console.log("miss");
+                    
+                }
+            },1000);
+        },0);
+        
+        var nowTime = [0,0,0,0];
+        
+
+        // 绑定事件
+        for (let i = 0; i < judgment.length; i++) {
+            judgment[i].onclick = function() {
+                nowTime[i] = new Date().getTime();
+            }
+        }
+
+        // 绑定键盘事件
+        document.onkeydown = function(even) {
+            var code = even.keyCode;
+
+            switch (code) {
+                case 68:
+                    judgment[0].className = "btnOn";
+                    nowTime[0] = new Date().getTime();
+                    break;
+                case 70:
+                    judgment[1].className = "btnOn";
+                    nowTime[1] = new Date().getTime();
+                    break;
+                case 74:
+                    judgment[2].className = "btnOn";
+                    nowTime[2] = new Date().getTime()
+                    break;
+                case 75:
+                    judgment[3].className = "btnOn";
+                    nowTime[3] = new Date().getTime();
+                    break;
+            }
+        }
+
+        document.onkeyup = function(even) {
+            switch (even.keyCode) {
+                case 68:
+                    judgment[0].className = "judgment";
+                    break;
+                case 70:
+                    judgment[1].className = "judgment";
+                    break;
+                case 74:
+                    judgment[2].className = "judgment";
+                    break;
+                case 75:
+                    judgment[3].className = "judgment";
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box {
+            background-color: aquamarine;
+            width: 1000px;
+            height: 200px;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            margin-left: -500px;
+        }
+        .show {
+            background-color: aqua;
+            width: 200px;
+            height: 150px;
+            float: left;
+            margin-top: 20px;
+            margin-left: 40px;
+        }
+        .on {
+            background-color: brown;
+            width: 200px;
+            height: 150px;
+            float: left;
+            margin-top: 20px;
+            margin-left: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="file" id="file"><br>
+    <button>开始</button>
+    <audio src=""></audio>
+    <div class="box">
+        <div class="show"></div>
+        <div class="show"></div>
+        <div class="show"></div>
+        <div class="show"></div>
+    </div>
+    <script>
+        var note;
+        var filesInput = document.querySelector("#file");
+        var shows = document.querySelectorAll(".show");
+        filesInput.addEventListener("change",hadleFiles,false);
+        
+        function hadleFiles() {
+            var files = document.getElementById("file").files[0];
+            var reader = new FileReader();
+            reader.readAsText(files);
+            reader.onload = function() {
+                let json = JSON.parse(this.result);
+                console.log(json);
+                note = json;
+            }
+        }
+
+        var startTime;
+        var startBtn = document.querySelector("button");
+        startBtn.onclick = function() {
+            startTime = new Date().getTime();
+            setInterval(way1,10);
+            setInterval(way2,10);
+            setInterval(way3,10);
+            setInterval(way4,10);
+        }
+
+        var time = [0,0,0,0]
+
+        
+        function way1() {
+            var nowTime = new Date().getTime();
+            if (note[0][time[0]].start == "end") {
+                return;
+            }
+            if (note[0][time[0]].start <= (nowTime - startTime)) {
+                console.log("轨道1成功触发");
+                if(shows[0].className == "on") {
+                    shows[0].className = "show";
+                } else {
+                    shows[0].className = "on"
+                }
+                time[0]++;
+                
+            }
+        }
+        function way2() {
+            var nowTime = new Date().getTime();
+            if (note[1][time[1]].start == "end") {
+                return;
+            }
+            if (note[1][time[1]].start <= (nowTime - startTime)) {
+                console.log("轨道2成功触发");
+                if(shows[1].className == "on") {
+                    shows[1].className = "show";
+                } else {
+                    shows[1].className = "on"
+                }
+                time[1]++;
+                
+            }
+        }
+        function way3() {
+            var nowTime = new Date().getTime();
+            if (note[2][time[2]].start == "end") {
+                return;
+            }
+            if (note[2][time[2]].start <= (nowTime - startTime)) {
+                console.log("轨道3成功触发");
+                if(shows[2].className == "on") {
+                    shows[2].className = "show";
+                } else {
+                    shows[2].className = "on"
+                }
+                time[2]++;
+                
+            }
+        }
+
+        function way4() {
+            var nowTime = new Date().getTime();
+            if (note[3][time[3]].start == "end") {
+                return;
+            }
+            if (note[3][time[3]].start <= (nowTime - startTime)) {
+                console.log("轨道4成功触发");
+                if(shows[3].className == "on") {
+                    shows[3].className = "show";
+                } else {
+                    shows[3].className = "on"
+                }
+                time[3]++;
+                
+            }
+        }
+    </script>
+</body>
+
+</html>

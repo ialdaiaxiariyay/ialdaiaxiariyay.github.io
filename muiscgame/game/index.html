@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteLine</title>
+    <link rel="icon" href="icon/icon.png">
+    <!-- 所有自带曲目的Json文件全部都在这里声明 -->
+    <script src="JSON/song1.json"></script>
+    <script src="JSON/song2.json"></script>
+    <style>
+        *::-webkit-scrollbar {
+            width: 5px;
+            
+        }
+        *::-webkit-scrollbar-track {
+            background-color: rgb(229, 229, 229);
+            margin-left: 10px;
+        }
+        *::-webkit-scrollbar-thumb {
+            background-color: rgb(113, 113, 113);
+            border-radius: 5px;
+        }
+        * {
+            user-select: none;
+            cursor: default;
+        }
+        /* 设置按钮的动画 */
+        button:active {
+            transform: scale(0.7,0.7);
+        }
+
+
+        /* 声明字体 */
+        @font-face {
+            font-family: "iconfont"; /* Project id  */
+            src: url('font_tylzha82vep/iconfont.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'FluentIcons';
+            src: url('Fluent-Icons/Segoe Fluent Icons.ttf') format('truetype')
+        }
+
+        .iconfont {
+            font-family: "iconfont" !important;
+            font-size: 16px;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+
+        /* 去掉 body 的外边距 */
+        body {
+            margin: 0;
+        }
+        /* 设置基础的界面样式 */
+        .line {
+            float: left;
+            height: calc(100vh);
+            border-right: 10px solid black;
+            width: 10px;
+            margin-top: 0;
+            padding-top: 0;
+            margin-left: 14%;
+            box-sizing: border-box;
+            text-align: center;
+            position: relative;
+        }
+        .lineClass {
+            height: calc(500vh);
+            width: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        /* 设置音符样式 */
+        .circle,
+        .move {
+            background-color: black;
+            width: 30px;
+            height: 30px;
+            
+            border-radius: 15px;
+            position: relative;
+            left: -10px;
+            top: calc(0% - 30px);
+            transition: top 1s linear;
+        }
+
+        
+        /* 创建音符下坠动画 */
+        @keyframes down {
+            from {
+                top: 0;
+            } 
+            to {
+                top: calc(95% - 30px - 15px);
+            }
+        }
+        /* 创建音符跨过判定点动画 */
+        @keyframes pass {
+            from {
+                top: calc(95% - 30px - 15px);
+            }
+            to {
+                top: 100%;
+            }
+        }
+        
+
+        .line .move {
+            position: absolute;
+            top: 100%;
+            transition: top 1s linear;
+            animation-name: down,pass;
+            animation-duration: 1s,0.2s;
+            animation-timing-function: linear;
+            animation-delay: 0s,1s;
+        }
+        
+        /* 将颜色填充上 */
+        #line1 .circle,
+        #line1 .move,
+        #line1 .judgment,
+        #line1 .btnOn {
+            background-color: #FF8000;
+        }
+        #line2 .circle,
+        #line2 .move,
+        #line2 .judgment,
+        #line2 .btnOn {
+            background-color: #00C4FF;
+        }
+        #line3 .circle,
+        #line3 .move,
+        #line3 .judgment,
+        #line3 .btnOn {
+            background-color: #F4E624;
+        }
+        #line4 .circle,
+        #line4 .move,
+        #line4 .judgment,
+        #line4 .btnOn {
+            background-color: #3FCD16;
+        }
+        #line5 .circle,
+        #line5 .move,
+        #line5 .judgment,
+        #line5 .btnOn {
+            background-color: #1F1E33;
+        }
+        #line6 .circle,
+        #line6 .move,
+        #line6 .judgment,
+        #line6 .btnOn {
+            background-color: #2c033f;
+        }
+
+        /* 设置判断点样式和动画 */
+        .judgment,
+        .btnOn {
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            bottom: 5%;
+            background-color: black;
+            left: -10px;
+            border-radius: 30px;
+            transition: all 0.1s;
+        }
+        .judgment:active {
+            transform: scale(0.5,0.5);
+        }
+        .btnOn {
+            transform: scale(0.5,0.5);
+        }
+
+        /* 让播放器不显示 */
+        audio {
+            display: none;
+        }
+
+
+        /* 设置界面上方的三个按钮的样式 */
+        #startBtn,
+        #noteIn,
+        #musicChoose {
+            position: fixed;
+            font-family: "iconfont";
+            color: rgba(37,37,37,0.6);
+            background-color: transparent;
+            border: none;
+            font-size: 36px;
+            padding: 5px;
+            transition: all 0.2s;
+        }
+        /* 设置三个按钮各自的位置 */
+        #startBtn {
+            left: 0;
+            top: 0;
+        }
+
+        #noteIn {
+            right: 0;
+            top: 0;
+        }
+
+        #musicChoose {
+            right: 50px;
+            top: 0;
+        }
+
+        
+        
+
+        #startBtn:hover,
+        #noteIn:hover,
+        #musicChoose:hover {
+            color: rgba(37,37,37,1);
+        }
+
+        /* 连击数样式 */
+        #comboNum {
+            width: 300px;
+            height: 50px;
+            position: fixed;
+            top: 5px;
+            left: 50%;
+            margin-left: -150px;
+            text-align: center;
+            line-height: 20px;
+        }
+        #comboNum .num,
+        #comboNum .words {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: bold;
+            
+            color: rgba(37,37,37,0.6);
+        }
+        #comboNum .num {
+            font-size: 24px;
+        }
+        #comboNum .words {
+            font-size: 16px;
+            
+        }
+
+        /* 设置一个类名可以隐藏 */
+        .none {
+            display: none;
+        }
+
+        /* 选歌窗口实现 */
+        /* 拥有关闭和显示两种状态 */
+        .close {
+            bottom: calc(0% - 500px);
+        }
+
+        .show {
+            box-shadow: 0px 0px 67px -34px grey;
+            bottom: calc(50% - 250px);
+        }
+
+        .show,
+        .close {
+            transition: all 0.5s ease;
+            border-radius: 25px;
+            position: fixed;
+            left: calc(50% - 400px);
+            background-color: rgb(242, 242, 242);
+            
+            height: 500px;
+            width: 800px;
+            overflow: auto;
+        }
+        /* 设置关闭按钮样式 */
+        .closeBtn {
+            border: 0;
+            font-family: 'FluentIcons';
+            font-weight: bolder;
+            font-size: 36px;
+            color: rgba(37,37,37,0.6);
+            background-color: rgba(0, 0, 0, 0);
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            right: 10px;
+            top: 10px;
+            transition: all 0.2s ease;
+        }
+        .closeBtn:hover {
+            color: red;
+        }
+        
+        /* 标题 */
+        #showMusic h1 {
+            margin-top: 10px;
+            position: absolute;
+            font-family: 'Microsoft YaHei';
+            top: 10px;
+            left: 20px;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        #showMusic h1:hover {
+            cursor: default;
+        }
+        #showMusic h1:active {
+            transform: scale(0.9,0.9);
+        }
+        /* 歌曲显示区域 */
+        #showMusic .songBox {
+            margin-top: 75px;
+            width: 800px;
+            height: 425px;
+            overflow-x: auto;
+        }
+        /* 歌曲封面 */
+        .songPic {
+            margin-top: 10px;
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+        }
+        /* 每一首歌的盒子 */
+        .song {
+            float: left;
+            width: 120px;
+            height: 160px;
+            border-radius: 10px;
+            text-align: center;
+            margin-left: 40px;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+        .song span {
+            font-family: 'Segoe UI', 'Microsoft Yahei';
+            font-weight: 600;
+        }
+        .song:hover {
+            background-color: rgba(107, 107, 107, 0.2);
+            cursor: default;
+        }
+        .song:active {
+            transform: scale(0.9,0.9);
+        }
+
+        /* 让界面一打开就能显示弹窗动画 */
+        @keyframes showFirst {
+            from {
+                bottom: calc(0% - 500px);
+            }
+            to {
+                bottom:  calc(50% - 250px);
+            }
+        }
+        .firstShow {
+            transition: all 0.5s ease;
+            border-radius: 25px;
+            position: fixed;
+            left: calc(50% - 400px);
+            background-color: rgb(242, 242, 242);
+            bottom: calc(50% - 250px);
+            height: 500px;
+            width: 800px;
+            overflow: auto;
+            animation: showFirst 0.5s;
+            box-shadow: 0px 0px 67px -34px grey;
+        }
+
+
+        .fileBoxShow,
+        .fileBoxClose {
+            position: fixed;
+            height: 300px;
+            width: 400px;
+            border-radius: 25px;
+            background-color: rgb(242, 242, 242);
+            left: calc(50% - 200px);
+            transition: all 0.5s ease;
+        }
+        .fileBoxShow {
+            bottom: calc(50% - 150px);
+            box-shadow: 0px 0px 67px -34px grey;
+        }
+        .fileBoxClose {
+            bottom: calc(0% - 300px);
+        }
+
+        #fileIn .option {
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.2s;
+            float: left;
+            width: 125px;
+            height: 150px;
+            margin-top: 75px;
+            margin-left: 50px;
+        }
+        #fileIn .option .icon {
+            display: block;
+            font-family: 'FluentIcons';
+            font-weight: bolder;
+            font-size: 54px;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+        #fileIn .option .words {
+           font-family: 'Microsoft YaHei';
+           font-weight: bold;
+            
+        }
+        #fileIn .option:hover {
+            background-color: rgba(107, 107, 107, 0.2);
+            cursor: default;
+        }
+        #fileIn .option:active {
+            transform: scale(0.9,0.9);
+        }
+
+        #thanks {
+            transition: all 0.5s ease;
+            border-radius: 25px;
+            position: fixed;
+            left: calc(50% - 400px);
+            background-color: rgb(242, 242, 242);
+            text-align: center;
+            height: 500px;
+            width: 800px;
+            overflow: auto;
+        }
+        .thanksClose {
+            bottom: calc(0% - 500px);
+        }
+        .thanksOpen {
+            box-shadow: 0px 0px 67px -34px grey;
+            bottom: calc(50% - 250px);
+        }
+
+        #thanks p{
+            font-family: 'Microsoft YaHei';
+            font-weight: 600;
+            user-select: text;
+        }
+    </style>
+    <link rel="stylesheet" id="theme" type="text/css" id="theme"></style>
+</head>
+<body>
+    <audio></audio>
+    <!-- 三个按钮 -->
+    <input class="none" type="file" id="file">
+    <button id="noteIn">&#xea45</button>
+    <button id="startBtn">&#xe655</button>
+    <button id="musicChoose">&#xeb90</button>
+    <!-- 连击显示 -->
+    <div id="comboNum">
+        <span class="num"></span><br>
+        <span class="words"></span>
+    </div>
+    <!-- 那四条线 -->
+    <div class="lineClass">
+        <div class="line" id="line1" style="border-color: #FF8000; width: -120px;">
+            <div class="judgment"></div>
+        </div>
+        <div class="line" id="line2" style="border-color: #00C4FF; width: -120px;">
+            <div class="judgment"></div>
+        </div>
+        <div class="line" id="line3" style="border-color: #F4E624; width: -120px;">
+            <div class="judgment"></div>
+        </div>
+        <div class="line" id="line4" style="border-color: #3FCD16; width: -120px;">
+            <div class="judgment"></div>
+        </div>
+        <div class="line" id="line5" style="border-color: #1F1E33; width: -120px;">
+            <div class="judgment"></div>
+        </div>
+        <div class="line" id="line6" style="border-color: #2f0332; width: -120px;">
+            <div class="judgment"></div>
+        </div>
+        
+    <!-- 选择曲目和导入曲目功能 -->
+    <div class="firstShow" id="showMusic">
+        <h1>选择曲目</h1>
+        <!-- 关闭按钮 -->
+        <button class="closeBtn" onclick="closeBoxMusic()">&#xe711</button>
+        <div class="songBox">
+            <div class="song" id="song1">
+                <img src="SongPictures/song1.png" alt="" class="songPic">
+                <span>New Journey!</span>
+            </div>
+            <div class="song" id="song2">
+                <img src="SongPictures/song2.png" alt="" class="songPic">
+                <span>Boring</span>
+            </div>
+        </div>
+        
+    </div>
+    
+    <div class="fileBoxClose" id="fileIn">
+        <button class="closeBtn" onclick="closeBoxFile()">&#xe711</button>
+        <div class="option" id="noteFileIn" onclick="NoteFileIn()">
+            <span class="icon">&#xe8a5</span>
+            <span class="words">导入谱面</span>
+        </div>
+        <div class="option" id="musicFileIn" onclick="MusicFileIn()">
+            <span class="icon">&#xec4f</span>
+            <span class="words">导入音乐</span>
+        </div>
+    </div>
+    
+    <script>
+        // 获取元素
+        // 那四条线
+        var lines = document.querySelectorAll(".line");
+        // 音符 （目前已无实际用处，但是不敢删这串代码）
+        var round = document.querySelectorAll(".circle");
+        // 判定点
+        var judgment = document.querySelectorAll(".judgment");
+        // 音乐播放
+        var musicPlay = document.querySelector("audio");
+        // 谱面文件的数据
+        var noteData;
+        // 导入谱面的 入口
+        var filesInput = document.querySelector("#file");
+        // 开始按钮
+        var startBtn = document.querySelector("#startBtn");
+        // 导入谱面和歌曲的按钮
+        var noteIn = document.querySelector("#noteIn");
+        // 选择曲目的按钮
+        var musicChoose = document.querySelector("#musicChoose");
+        // 连击数数字区域
+        var comboNum = document.querySelector("#comboNum").querySelector(".num");
+        // 连击区域中的 combo 文字
+        var comboWords = document.querySelector("#comboNum").querySelector(".words");
+        // 开始的时间
+        var startTime = 0;
+        // 连击数
+        var combo = 0;
+        // 最后一次按下判定点的时间戳，分为四个区域
+        var nowTime = [0,0,0,0,0,0];
+        // 音符生成的数量
+        var time = [0,0,0,0,0,0];
+
+
+        // 设置生成音符的回调函数
+        var w1;
+        var w2;
+        var w3;
+        var w4;
+        var w5;
+        var w6;
+        var wm;
+        // 加载音效
+        var audio1 = new Audio("audio/audio1.mp3");
+
+        // 音乐定时播放
+        var musicPlayOut;
+
+        // 开始按钮
+
+        // 当前是否为开始状态
+        var isStart = false;
+        startBtn.onclick = function() {
+            if (noteData == undefined) {
+                alert("谱面文件为空");
+                return;
+            }
+            if (isStart) {
+                // 如果是开始状态，按下按钮后会暂停
+                // 清除所有生成音符的回调函数
+                clearInterval(w1);
+                clearInterval(w2);
+                clearInterval(w3);
+                clearInterval(w4);
+                clearInterval(w5);
+                clearInterval(w6);
+                clearTimeout(musicPlayOut);
+                // 暂停判断音乐是否结束
+                clearInterval(wm);
+                this.innerHTML = "&#xe655";
+                isStart = false;
+                musicPlay.pause();
+                return;
+            }
+            startTime = new Date().getTime();
+            musicPlayOut = setTimeout(function() {
+                if (isStart) {
+                    musicPlay.play();
+                } else {
+                    return;
+                }
+            },3000);
+            // 每 10ms 判断一次是否需要生成音符
+            w1 = setInterval(way1,10);
+            w2 = setInterval(way2,10);
+            w3 = setInterval(way3,10);
+            w4 = setInterval(way4,10);
+            w5 = setInterval(way5,10);
+            w6 = setInterval(way6,10);
+            // 判断音乐是否结束
+            wm = setInterval(endMusic,1000);
+            this.innerHTML = "&#xe65d";
+            isStart = true;
+        }
+
+        
+        // 选择曲目
+        musicChoose.onclick = function() {
+            document.querySelector("#showMusic").className = "show";
+        }
+
+
+        // 导入文件
+        noteIn.onclick = function() {
+            document.querySelector("#fileIn").className = "fileBoxShow";
+        }
+
+        // 导入音乐
+        function MusicFileIn() {
+            musicPlay.src = prompt("输入音乐路径");
+        }
+        function NoteFileIn() {
+            filesInput.click();
+        }
+
+        // 关闭选择曲目的窗口
+        function closeBoxMusic() {
+            document.querySelector("#showMusic").className = "close";
+        }
+        // 关闭导入文件窗口
+        function closeBoxFile() {
+            document.querySelector("#fileIn").className = "fileBoxClose"
+        }
+
+
+        // 轨道
+
+        // 轨道1
+        function way1() {
+            var now = new Date().getTime();
+            // 如果在谱面文件中读取到结束信号，就不再继续判断是否需要生成该轨道的音符
+            if (noteData[0][time[0]].start == "end") {
+                clearInterval(w1);
+                return;
+            }
+            if (noteData[0][time[0]].start - 1000 <= (now - startTime)) {
+                // 创建元素
+                var note = document.createElement("div");
+                note.className = "move";
+                var bornTime = new Date().getTime();
+                lines[0].appendChild(note);
+                // 增加生成的音符数量
+                time[0]++;
+                // 判断
+                setTimeout(function() {
+                    // 如果判定点从未按过，那也算为 miss （这串代码已经没用了，但是懒得删
+                    // 现在已经删掉了
+                    // 如果按下时的时间减去音符生成的时间小于 1300 而且 大于 700 ，那就算为 命中
+                    if (nowTime[0] - bornTime <= 1300 && nowTime[0] - bornTime >= 700) {
+                        console.log("命中");
+                        // 连击数增加
+                        combo++;
+                        // 更新界面上的连击数字
+                        comboNum.innerHTML = combo + "";
+                        comboWords.innerHTML = "combo"
+                    } else {
+                        // 如果没有命中，那就等300ms在判定一次
+                        setTimeout(function() {
+                            if(nowTime[0] - bornTime <= 1300 && nowTime[0] - bornTime >= 700) {
+                                console.log("命中");
+                                // 连击数增加
+                                combo++;
+                                // 更新界面上的连击数字
+                                comboNum.innerHTML = combo + "";
+                                comboWords.innerHTML = "combo"
+                            } else {
+                                // 判定为 miss ，combo清0
+                                console.log("miss");
+                                combo = 0;
+                                comboNum.innerHTML = "";
+                                comboWords.innerHTML = "";
+                            }
+                        },300)
+                    }
+                },1000)
+                
+            }
+        }
+        // 轨道2
+        function way2() {
+            var now = new Date().getTime();
+            if (noteData[1][time[1]].start == "end") {
+                clearInterval(w2);
+                return;
+            }
+            if (noteData[1][time[1]].start - 1000 <= (now - startTime)) {
+                var note = document.createElement("div");
+                note.className = "move";
+                var bornTime = new Date().getTime();
+                lines[1].appendChild(note);
+                time[1]++;
+                setTimeout(function() {
+                    
+                    if (nowTime[1] - bornTime <= 1300 && nowTime[1] - bornTime >= 700) {
+                        console.log("命中");
+                        combo++;
+                        comboNum.innerHTML = combo + "";
+                        comboWords.innerHTML = "combo"
+                    } else {
+                        setTimeout(function() {
+                            if(nowTime[1] - bornTime <= 1300 && nowTime[1] - bornTime >= 700) {
+                                console.log("命中");
+                                // 连击数增加
+                                combo++;
+                                // 更新界面上的连击数字
+                                comboNum.innerHTML = combo + "";
+                                comboWords.innerHTML = "combo"
+                            } else {
+                                // 判定为 miss ，combo清0
+                                console.log("miss");
+                                combo = 0;
+                                comboNum.innerHTML = "";
+                                comboWords.innerHTML = "";
+                            }
+                        },300)
+                    }
+                
+                },1000)
+            }
+        }
+        // 轨道3
+        function way3() {
+            var now = new Date().getTime();
+            if (noteData[2][time[2]].start == "end") {
+                clearInterval(w3);
+                return;
+            }
+            if (noteData[2][time[2]].start - 1000 <= (now - startTime)) {
+                var note = document.createElement("div");
+                note.className = "move";
+                var bornTime = new Date().getTime();
+                lines[2].appendChild(note);
+                time[2]++;
+                setTimeout(function() {
+                    
+                    if (nowTime[2] - bornTime <= 1300 && nowTime[2] - bornTime >= 700) {
+                        console.log("命中");
+                        combo++;
+                        comboNum.innerHTML = combo + "";
+                        comboWords.innerHTML = "combo"
+                    } else {
+                        setTimeout(function() {
+                            if(nowTime[2] - bornTime <= 1300 && nowTime[2] - bornTime >= 700) {
+                                console.log("命中");
+                                // 连击数增加
+                                combo++;
+                                // 更新界面上的连击数字
+                                comboNum.innerHTML = combo + "";
+                                comboWords.innerHTML = "combo"
+                            } else {
+                                // 判定为 miss ，combo清0
+                                console.log("miss");
+                                combo = 0;
+                                comboNum.innerHTML = "";
+                                comboWords.innerHTML = "";
+                            }
+                        },300)
+                    }
+                    
+                },1000);
+            }
+        }
+        // 轨道4
+        function way4() {
+            var now = new Date().getTime();
+            if (noteData[3][time[3]].start == "end") {
+                clearInterval(w4);
+                return;
+            }
+            if (noteData[3][time[3]].start - 1000 <= (now - startTime)) {
+                var note = document.createElement("div");
+                note.className = "move";
+                var bornTime = new Date().getTime();
+                lines[3].appendChild(note);
+                time[3]++;
+                setTimeout(function() {
+                    
+                    if (nowTime[3] - bornTime <= 1300 && nowTime[3] - bornTime >= 700) {
+                        console.log("命中");
+                        combo++;
+                        comboNum.innerHTML = combo + "";
+                        comboWords.innerHTML = "combo";
+                    } else {
+                        setTimeout(function() {
+                            if(nowTime[3] - bornTime <= 1300 && nowTime[3] - bornTime >= 700) {
+                                console.log("命中");
+                                // 连击数增加
+                                combo++;
+                                // 更新界面上的连击数字
+                                comboNum.innerHTML = combo + "";
+                                comboWords.innerHTML = "combo"
+                            } else {
+                                // 判定为 miss ，combo清0
+                                console.log("miss");
+                                combo = 0;
+                                comboNum.innerHTML = "";
+                                comboWords.innerHTML = "";
+                            }
+                        },300)
+                    }
+                    
+                },1000);
+            }
+        }
+        //gd5
+        function way5() {
+            var now = new Date().getTime();
+            // 如果在谱面文件中读取到结束信号，就不再继续判断是否需要生成该轨道的音符
+            if (noteData[4][time[4]].start == "end") {
+                clearInterval(w5);
+                return;
+            }
+            if (noteData[4][time[4]].start - 1000 <= (now - startTime)) {
+                // 创建元素
+                var note = document.createElement("div");
+                note.className = "move";
+                var bornTime = new Date().getTime();
+                lines[4].appendChild(note);
+                // 增加生成的音符数量
+                time[4]++;
+                // 判断
+                setTimeout(function() {
+                    // 如果判定点从未按过，那也算为 miss （这串代码已经没用了，但是懒得删
+                    // 现在已经删掉了
+                    // 如果按下时的时间减去音符生成的时间小于 1300 而且 大于 700 ，那就算为 命中
+                    if (nowTime[4] - bornTime <= 1300 && nowTime[4] - bornTime >= 700) {
+                        console.log("命中");
+                        // 连击数增加
+                        combo++;
+                        // 更新界面上的连击数字
+                        comboNum.innerHTML = combo + "";
+                        comboWords.innerHTML = "combo"
+                    } else {
+                        // 如果没有命中，那就等300ms在判定一次
+                        setTimeout(function() {
+                            if(nowTime[4] - bornTime <= 1300 && nowTime[4] - bornTime >= 700) {
+                                console.log("命中");
+                                // 连击数增加
+                                combo++;
+                                // 更新界面上的连击数字
+                                comboNum.innerHTML = combo + "";
+                                comboWords.innerHTML = "combo"
+                            } else {
+                                // 判定为 miss ，combo清0
+                                console.log("miss");
+                                combo = 0;
+                                comboNum.innerHTML = "";
+                                comboWords.innerHTML = "";
+                            }
+                        },300)
+                    }
+                },1000)
+                
+            }
+        }
+        //gd6
+        function way6() {
+            var now = new Date().getTime();
+            // 如果在谱面文件中读取到结束信号，就不再继续判断是否需要生成该轨道的音符
+            if (noteData[5][time[5]].start == "end") {
+                clearInterval(w6);
+                return;
+            }
+            if (noteData[5][time[5]].start - 1000 <= (now - startTime)) {
+                // 创建元素
+                var note = document.createElement("div");
+                note.className = "move";
+                var bornTime = new Date().getTime();
+                lines[5].appendChild(note);
+                // 增加生成的音符数量
+                time[5]++;
+                // 判断
+                setTimeout(function() {
+                    // 如果判定点从未按过，那也算为 miss （这串代码已经没用了，但是懒得删
+                    // 现在已经删掉了
+                    // 如果按下时的时间减去音符生成的时间小于 1300 而且 大于 700 ，那就算为 命中
+                    if (nowTime[5] - bornTime <= 1300 && nowTime[5] - bornTime >= 700) {
+                        console.log("命中");
+                        // 连击数增加
+                        combo++;
+                        // 更新界面上的连击数字
+                        comboNum.innerHTML = combo + "";
+                        comboWords.innerHTML = "combo"
+                    } else {
+                        // 如果没有命中，那就等300ms在判定一次
+                        setTimeout(function() {
+                            if(nowTime[5] - bornTime <= 1300 && nowTime[5] - bornTime >= 700) {
+                                console.log("命中");
+                                // 连击数增加
+                                combo++;
+                                // 更新界面上的连击数字
+                                comboNum.innerHTML = combo + "";
+                                comboWords.innerHTML = "combo"
+                            } else {
+                                // 判定为 miss ，combo清0
+                                console.log("miss");
+                                combo = 0;
+                                comboNum.innerHTML = "";
+                                comboWords.innerHTML = "";
+                            }
+                        },300)
+                    }
+                },1000)
+                
+            }
+        }
+        // 判断音乐是否结束
+        function endMusic() {
+            var now = new Date().getTime();
+            var timeToStart = now - startTime;
+            if (noteData.musicLong <= timeToStart) {
+                startBtn.click();
+                combo = 0;
+                time = [0,0,0,0,0,0];
+                nowTime = [0,0,0,0,0,0];
+            }
+            
+        }
+
+        
+
+        // 获取谱面文件
+        filesInput.addEventListener("change",hadleFiles,false);
+        function hadleFiles() {
+            var files = document.getElementById("file").files[0];
+            var reader = new FileReader();
+            reader.readAsText(files);
+            reader.onload = function() {
+                let json = JSON.parse(this.result);
+                console.log(json);
+                noteData = json;
+            }
+        }
+
+
+        
+
+
+
+        // 绑定事件
+        for (let i = 0; i < judgment.length; i++) {
+            judgment[i].onclick = function() {
+                nowTime[i] = new Date().getTime();
+                var audio2 = new Audio("audio/audio2.mp3");
+                // audio2.play();
+            }
+        }
+
+        // 绑定键盘事件
+        document.onkeydown = function(even) {
+            var code = even.keyCode;
+
+            switch (code) {
+                case 68:
+                    judgment[0].className = "btnOn";
+                    nowTime[0] = new Date().getTime();
+                    var audio2 = new Audio("audio/audio2.mp3");
+                    // audio2.play();
+                    break;
+                case 70:
+                    judgment[1].className = "btnOn";
+                    nowTime[1] = new Date().getTime();
+                    var audio2 = new Audio("audio/audio2.mp3");
+                    // audio2.play();
+                    break;
+                case 71:
+                    judgment[2].className = "btnOn";
+                    nowTime[2] = new Date().getTime();
+                    var audio2 = new Audio("audio/audio2.mp3");
+                    // audio2.play();
+                    break;
+                case 72:
+                    judgment[3].className = "btnOn";
+                    nowTime[3] = new Date().getTime();
+                    var audio2 = new Audio("audio/audio2.mp3");
+                    // audio2.play();
+                    break;
+                case 74:
+                    judgment[4].className = "btnOn";
+                    nowTime[4] = new Date().getTime();
+                    var audio2 = new Audio("audio/audio2.mp3");
+                    // audio2.play();
+                    break;
+                case 75:
+                    judgment[5].className = "btnOn";
+                    nowTime[5] = new Date().getTime();
+                    var audio2 = new Audio("audio/audio2.mp3");
+                    // audio2.play();
+                    break;
+            }
+        }
+
+        document.onkeyup = function(even) {
+            switch (even.keyCode) {
+                case 68:
+                    judgment[0].className = "judgment";
+                    break;
+                case 70:
+                    judgment[1].className = "judgment";
+                    break;
+                case 71:
+                    judgment[2].className = "judgment";
+                    break;
+                case 72:
+                    judgment[3].className = "judgment";
+                    break;
+                case 74:
+                    judgment[4].className = "judgment";
+                    break;
+                case 75:
+                    judgment[5].className = "judgment";
+                    break;
+            }
+        }
+
+        
+        
+    </script>
+    <!-- 选择曲目界面的JS脚本文件 -->
+    <script src="JS/ChooseMusic.js"></script>
+    <script src="JS/Activity.js"></script>
+</body>
+</html>

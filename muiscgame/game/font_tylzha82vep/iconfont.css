@@ -1,0 +1,49 @@
+@font-face {
+  font-family: "iconfont"; /* Project id  */
+  src: url('iconfont.ttf?t=1649478595131') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-fluent_play-48-filled:before {
+  content: "\e655";
+}
+
+.icon-fluent_delete-16-regular:before {
+  content: "\e659";
+}
+
+.icon-fluent_pause-48-filled:before {
+  content: "\e65d";
+}
+
+.icon-ic_fluent_add_24_filled:before {
+  content: "\ea45";
+}
+
+.icon-ic_fluent_document_javascript_24_regular:before {
+  content: "\eaf0";
+}
+
+.icon-ic_fluent_heart_24_filled:before {
+  content: "\eb48";
+}
+
+.icon-ic_fluent_home_24_filled:before {
+  content: "\eb4b";
+}
+
+.icon-ic_fluent_music_note_1_24_filled:before {
+  content: "\eb8f";
+}
+
+.icon-ic_fluent_music_note_2_24_filled:before {
+  content: "\eb90";
+}
+

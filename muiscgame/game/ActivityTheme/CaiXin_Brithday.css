@@ -1,0 +1,41 @@
+body {
+    background-color: #FFF5EE;
+}
+/* 将颜色填充上 */
+#line1 .circle,
+#line1 .move,
+#line1 .judgment,
+#line1 .btnOn {
+    background-color: #FFE4CA !important;
+}
+#line2 .circle,
+#line2 .move,
+#line2 .judgment,
+#line2 .btnOn {
+    background-color: #FFE66F !important;
+}
+#line3 .circle,
+#line3 .move,
+#line3 .judgment,
+#line3 .btnOn {
+    background-color: #AE8F00 !important;
+}
+#line4 .circle,
+#line4 .move,
+#line4 .judgment,
+#line4 .btnOn {
+    background-color: #FFAD86 !important;
+}
+
+#line1 {
+    border-color: #FFE4CA !important;
+}
+#line2 {
+    border-color: #FFE66F !important;
+}
+#line3 {
+    border-color: #AE8F00 !important;
+}
+#line4 {
+    border-color: #FFAD86 !important;
+}

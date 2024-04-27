@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteMaker</title>
+    <style>
+        .ctrl {
+            background-color: skyblue;
+            height: 30px;
+            width: 50px;
+        }
+        .buttons {
+            
+            margin: calc(70vh) auto 0 auto;
+            
+
+        }
+        .note {
+            
+            height: 70px;
+            width: 200px;
+            background-color: aqua;
+            margin-bottom: 10px;
+            margin-left: 30px;
+        }
+        .note:active {
+            background-color: brown;
+        }
+
+
+        .blue {
+            color: rgb(1, 102, 242);
+        }
+        .red {
+            color: orangered;
+        }
+        .green {
+            color: rgba(47, 219, 24, 0.986);
+        }
+        .yellow {
+            color: rgb(190, 190, 75);
+        }
+    </style>
+</head>
+<body>
+    <label>输入文件路径: <input type="url"></label>
+    <audio src="">无法显示</audio>
+    <br><br>
+    <button class="ctrl" id="start">开始</button>
+    <button class="ctrl" id="end">结束</button>
+    <button class="ctrl" id="out">导出</button>
+    <div class="buttons">
+        <button class="note" index="0">1</button>
+        <button class="note" index="1">2</button>
+        <button class="note" index="2">3</button>
+        <button class="note" index="3">4</button>
+        <button class="note" index="4">5</button>
+        <button class="note" index="5">6</button>
+    </div>
+    <span id="tip"></span>
+    <script>
+        // 获取标签
+        var start = document.querySelector("#start");
+        var play = document.querySelector("audio");
+        var file = document.querySelector("input");
+        var noteButton = document.querySelectorAll(".note");
+        var end = document.querySelector("#end");
+        var tip = document.querySelector("#tip");
+        var out = document.querySelector("#out");
+
+        
+
+
+    function saveJSON(data, filename){
+    if(!data) {
+        alert('保存的数据为空');
+        return;
+    }
+    if(!filename) 
+        filename = 'json.json'
+    if(typeof data === 'object'){
+        data = JSON.stringify(data, undefined, 6)
+    }
+    var blob = new Blob([data], {type: 'text/json'}),
+    a = document.createElement('a')
+    a.download = filename
+    a.href = window.URL.createObjectURL(blob)
+    a.dataset.downloadurl = ['text/json', a.download, a.href].join(':')
+
+    // 创建并分发新的 MouseEvent
+    var event = new MouseEvent('click', {
+        bubbles: true,    // 事件是否冒泡
+        cancelable: false,  // 事件是否可以取消
+        view: window       // 指定事件的视图 (通常是 window)
+    });
+    a.dispatchEvent(event);
+    }
+
+        // 播放音乐的路径
+        let path;
+
+        // 记录音符的次数
+        var time = [0,0,0,0,0,0];
+
+        // 音符数据
+        var note = {
+            0:{
+                
+            },
+            1:{
+
+            },
+            2:{
+
+            },
+            3:{
+
+            },
+            4:{
+
+            },
+            5:{
+
+            }
+        }
+
+        // 开始时间
+        var startTime;
+
+        // 按钮点击事件
+        start.onclick = function() {
+            alert("请按照音乐节奏点击下列按钮或使用键盘");
+            alert("三秒后开始");
+            setTimeout("play.play()",3000);
+            play.src = file.value;
+            startTime = new Date().getTime();
+            
+            for (let i = 0; i < noteButton.length; i++) {
+                noteButton[i].onclick = function() {
+                    // 获取按钮的index属性用来测试
+                    console.log(this.getAttribute("index"));
+
+                    // 获取按下按钮时间
+                    var nowTime = new Date().getTime();
+                    
+                    // 将音符距离开始时的时长记录到音符数据中
+                    note[this.getAttribute("index")][time[parseFloat(this.getAttribute("index"))]] = {
+                        start: nowTime - startTime,
+                    };
+
+                    // 将记录音符的次数加1
+                    time[parseFloat(this.getAttribute("index"))] ++;
+
+                }
+            }
+
+            // 使用键盘进行制谱
+            document.onkeydown = function(even) {
+                // 获取按下按键
+                var code = even.keyCode;
+
+                // 将对应按键按下的数据存放到对应的位置中
+                switch (code) {
+                    case 68:
+                        var nowTime = new Date().getTime();
+                        note[0][time[0]] = {
+                            start: nowTime - startTime
+                        }
+                        time[0]++;
+                        console.log(0);
+                        tip.innerHTML = "你按下了 D";
+                        tip.className = "red";
+                        break;
+                    case 70:
+                        var nowTime = new Date().getTime();
+                        note[1][time[1]] = {
+                            start: nowTime - startTime
+                        }
+                        time[1]++;
+                        console.log(1);
+                        tip.innerHTML = "你按下了 F";
+                        tip.className = "blue";
+                        break;
+                    case 71:
+                        var nowTime = new Date().getTime();
+                        note[2][time[2]] = {
+                            start: nowTime - startTime
+                        }
+                        time[2]++;
+                        console.log(2);
+                        tip.innerHTML = "你按下了 G";
+                        tip.className = "green";
+                        break;
+                    case 72:
+                        var nowTime = new Date().getTime();
+                        note[3][time[3]] = {
+                            start: nowTime - startTime
+                        }
+                        time[3]++;
+                        console.log(3);
+                        tip.innerHTML = "你按下了 H";
+                        tip.className = "yellow";
+                        break;
+                    case 74:
+                        var nowTime = new Date().getTime();
+                        note[4][time[4]] = {
+                            start: nowTime - startTime
+                        }
+                        time[4]++;
+                        console.log(4);
+                        tip.innerHTML = "你按下了 J";
+                        tip.className = "yellow";
+                        break;
+                    case 75:
+                        var nowTime = new Date().getTime();
+                        note[5][time[5]] = {
+                            start: nowTime - startTime
+                        }
+                        time[5]++;
+                        console.log(5);
+                        tip.innerHTML = "你按下了 K";
+                        tip.className = "yellow";
+                        break;
+                }
+            }
+        }
+        var temp1;
+
+        // 设置结束按钮
+        end.onclick = function() {
+            // 获取结束时间
+            var endTime = new Date().getTime();
+
+            for(let i = 0; i < noteButton.length; i++) {
+                noteButton[i].onclick = function() {
+                    console.log("已结束");
+                }
+                
+            }
+
+            document.onkeydown = function(even) {
+                console.log("已结束");
+            }
+
+            // 将歌曲时长记录到音符数据中
+            note.musicLong = endTime - startTime;
+
+            note[0][time[0]] = {
+                start: "end"
+            }
+            note[1][time[1]] = {
+                start: "end"
+            }
+            note[2][time[2]] = {
+                start: "end"
+            }
+            note[3][time[3]] = {
+                start: "end"
+            }
+            note[4][time[4]] = {
+                start: "end"
+            }
+            note[5][time[5]] = {
+                start: "end"
+            }
+
+            alert("请保存谱面，如果不满意，请刷新网页重新开始");
+
+            temp1 = note;
+        }
+
+        out.onclick = function() {
+            var name = prompt("输入导出文件名") + ".json";
+            saveJSON(note, name);
+
+        }
+        
+    </script>
+</body>
+</html>
