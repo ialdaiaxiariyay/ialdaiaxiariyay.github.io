@@ -6,7 +6,7 @@ event.create("large_infuser", "multiblock")//这是你注册多方块机器的id
         .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic(1, 4)))//配方的执行模式，例如能升压
         .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)//也可以写成.appearanceBlock(() => Block.getBlock("iald:deepvioletgleamblock")),iald:deepvioletgleamblock是你想设置的方块
         .pattern((definition) =>
-            FactoryBlockPattern.start()//多方块结构,可以使用群里的MBHelps.js或者来找我要(QQ:2053345890)
+            FactoryBlockPattern.start()//多方块结构,可以使用群里的MBHelps.js或者来找我要(QQ:2053345890)或者使用网页提供的js文件
                 .aisle("bbb", "bbb", "bbb")
                 .aisle("bbb", "bcb", "bbb")
                 .aisle("bbb", "bab", "bbb")
@@ -20,6 +20,7 @@ event.create("large_infuser", "multiblock")//这是你注册多方块机器的id
                     .or(Predicates.abilities(PartAbility.PARALLEL_HATCH).setMaxGlobalLimited(1))//并行仓
                     .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(2)))//能源仓
                     .or(Predicates.abilities(PartAbility.MAINTENANCE).setExactLimit(1))//维护仓
+                    //对于其他仓，请自行寻找
                 .where("c", Predicates.blocks("gtceu:bronze_pipe_casing"))//设置结构使用的方块
                 .build())
         .workableCasingRenderer("gtceu:block/casings/steam/steel/side", "gtceu:block/multiblock/gcym/large_maceration_tower", true)//设置机器主方块的外观
