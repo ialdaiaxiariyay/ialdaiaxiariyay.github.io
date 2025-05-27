@@ -6,7 +6,7 @@ event.create("large_infuser", "multiblock")//这是你注册多方块机器的id
         .recipeModifier(GTRecipeModifiers.ELECTRIC_OVERCLOCK.apply(OverclockingLogic(1, 4)))//配方的执行模式，例如能升压
         .appearanceBlock(GTBlocks.CASING_STEEL_SOLID)//也可以写成.appearanceBlock(() => Block.getBlock("iald:deepvioletgleamblock")),iald:deepvioletgleamblock是你想设置的方块
         .pattern((definition) =>
-            FactoryBlockPattern.start()//多方块结构,可以使用群里的MBHelps.js或者来找我要(QQ:2053345890)或者使用网页提供的js文件
+            FactoryBlockPattern.start()//多方块结构,可以使用网页提供的js文件
                 .aisle("bbb", "bbb", "bbb")
                 .aisle("bbb", "bcb", "bbb")
                 .aisle("bbb", "bab", "bbb")
@@ -33,7 +33,7 @@ GTCEuStartupEvents.registry("gtceu:recipe_type", event => {
         .setSlotOverlay(false, false, GuiTextures.SOLIDIFIER_OVERLAY)
         .setMaxIOSize(3, 2, 9, 2)//设置输入和输出。3,2都是物品的输入输出。9,2是流体的输入输出
         .setProgressBar(GuiTextures.PROGRESS_BAR_ARC_FURNACE, FillDirection.LEFT_TO_RIGHT)
-        .setSound(GTSoundEntries.ARC)//jei查看的配方界面
+        .setSound(GTSoundEntries.ARC)//机器运行声音
 })
 //下面是注册的多方块机器和配方的语言文件的编辑，可以写在assets中的kubejs中的lang/zh_cn.json中
 {
