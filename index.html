@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ialdaiaxiariyay web</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="main.css">
+    <link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAADq7/T/6O70/+fs9P/FwOD/rqXb/6SY5/+6r+v/xrby/8q69v+vovP/w9D0/7q+3P+6tdj/0tHm/8TN6f/a2uH/7fH1/+/0+P/v8/j/0tLs/9TU8f/KyPP/5eTz/76t7v/CsPL/x8jv/9Xn+v/M2fP/7O3w/9vg6/+1yfj/yMra/+ft9P/r8ff/9Pj6/+3y+P/h4vP/6uv0/7y85P+4tfD/u7Hp/6Oc5/+7wO3/ytLq/+Tn7v/Y5/X/0ub6/7bK7//k6Oz/6vD3/+7z+P/y9vr/+Pn7/+bn6/+5ttv/vLTc/9LT3f/Ewtj/w77h/7275P/Z4fD/4O74/9zt+v/P4vj/6u/z//D1+f/x9fn/7/T4/+3x9f/d4+z/wdf5/8rU6P/Z2uL/4+Tq/9DP3f/LyN//1+P0/9Lj9v/g7/v/4e/7/+bs8//q8Pf/6vD3/+/0+P/m6/H/1t3s/9Xl9f/NzOT/4uTq/+7v8v/29vj/xs7T/8DP0f/j6/L/4+nx/+bt9f/Z2Nf/2NTO/+Lh3f/s7/T/7PH2/8XC4P+zuuH/19Lo//Ly9f/y8/T/7e/x/9bc4P/c4+X/5O3y/+3y+P/t8/j/1NDR/7ypoP+/rpr/3t3d/+fr8//S0+b/cWa8/7av1P/9/fv/5erq/9ng5P/o7PH/9Pf5//D0+P/r8ff/7vP4/6SVyP+8rbf/qpa2/6aUu/++ttf/vr/o/6Kn5P+5x+v/4efu/+rv9f/p7/X/7vH1//D1+f/u8vX/6e3y/+zy+P+Hdsz/vLHT/7Sn1P+Rfsf/sabZ/6Sm5f+lr+D/ydz4/9vr9//Z2uv/09Hj//L1+P/r8ff/7fL4/+ju9f/q8fj/xsXi/7+36/+kluP/jX3i/7Ck3P+eouL/X1uU/9fm9//O4vn/srHY/8jB0P/t7/L/6/H3/+vx+P/q8ff/6vH3/5aJ4//AuPL/j4Hw/5SF6v/CuvL/qKjo/6i26P+puO7/lZ/J/5SNx//HwtT/8/T1/+3y+P/q8Pb/6vH4/+rx+P+Thun/lonv/4t9+f+lmO3/ubDu/7Cr7v+1sfH/pq7t/6eu5P+gldP/4+fy//L09//2+fv/6vD3/+rw+P/q8Pj/4+jz/5OH+v+UhvT/qZ3l/7Ws6P/Evvb/vrX0/7iw8v+6svD/wLrs/97h8P/2+fr/7fL4/+fs8v/v9Pj/6vD3/8zM8f+1sPf/4uf2/7Su4v+yqOv/x8D5/8S99/+8svX/vbbv/97g8f/q8Pf/9vn7/+/0+P/r7/T/7PL4/+zy+P/n7fT/6vH4/+rx+P/Oz/P/vbnu/9TU8v+8tu//oJTm/+Pm9P/s8fj/8PT4//T4+v/t8vj/6vD3//X3+v/09/r/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==" type="image/x-icon"/>
+    <style>
+    </style>
+</head>
+<body>
+    <!-- 星尘背景 -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- 悬浮山脉 -->
+    <div class="mountains" id="mountains"></div>
+    
+    <div class="container">
+        <!-- 左侧机械巨树面板 -->
+        <div class="tree-panel">
+            <div class="mechanical-tree" id="tree">
+                <!-- 树冠区域 -->
+                <div class="tree-canopy">
+                    <div class="name-canopy" id="particle-name"></div>
+                </div>
+                
+                <!-- 树根区域 -->
+                <div class="tree-root">
+                    <div class="name-root"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 右侧内容面板 -->
+        <div class="content-panel">
+            <div class="panel-header">
+                <h1>ialdaiaxiariyay</h1>
+                <h2>MCMod Dev</h2>
+            </div>
+            
+            <div class="about">
+                <h3>关于我</h3>
+                <p>一个兴趣使然的模组开发者</p>
+            </div>
+            <div class="projects">
+                <h3>近期项目</h3>
+                <div class="projects-grid">
+                    <div class="project-card" onclick="window.open('https://github.com/ialdaiaxiariyay/gtlcecore')">
+                        <h4>GTLCeCore</h4>
+                        <p>格雷科技休闲版-社区的核心模组</p>
+                    </div>
+                    <div class="project-card" onclick="window.open('https://github.com/ialdaiaxiariyay/GregTechLeisureCommunityEdition-ModPack')">
+                        <h4>格雷科技休闲版-社区</h4>
+                        <p>格雷科技休闲版的社区版本</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact">
+                <h3>个人链接</h3>
+                <div class="contact-links">
+                    <a href="https://github.com/ialdaiaxiariyay" class="contact-link"><i class="fab fa-github"></i></a>
+                    <a href="iald@mail.ialdaiaxiariyay.top" class="contact-link"><i class="fas fa-envelope"></i></a>
+                    <a href="https://space.bilibili.com/616004047" class="contact-link"><i class="fab fa-bilibili"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 粒子效果容器 -->
+    <div id="particles"></div>
+    <script src="main.js"></script>
+</body>
+</html>
