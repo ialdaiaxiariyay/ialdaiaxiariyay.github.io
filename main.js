@@ -131,7 +131,7 @@
                     petal.className = 'petal';
                     petal.innerHTML = '❖', '✦', '✧', '✶', '✷', '✸', '✹', '❈', '❉';
                     petal.style.position = 'fixed';
-                    petal.style.left = `${Math.random() * 100}vw`;
+                    petal.style.left = `${Math.random() * 1000}vw`;
                     petal.style.top = '-50px';
                     petal.style.color = `rgba(79, 255, 201, ${0.7 + Math.random() * 0.3})`;
                     petal.style.fontSize = `${16 + Math.random() * 10}px`;

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小说阅读器 —— 世界线收束：真理之环</title>
+    <link rel="icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAADq7/T/6O70/+fs9P/FwOD/rqXb/6SY5/+6r+v/xrby/8q69v+vovP/w9D0/7q+3P+6tdj/0tHm/8TN6f/a2uH/7fH1/+/0+P/v8/j/0tLs/9TU8f/KyPP/5eTz/76t7v/CsPL/x8jv/9Xn+v/M2fP/7O3w/9vg6/+1yfj/yMra/+ft9P/r8ff/9Pj6/+3y+P/h4vP/6uv0/7y85P+4tfD/u7Hp/6Oc5/+7wO3/ytLq/+Tn7v/Y5/X/0ub6/7bK7//k6Oz/6vD3/+7z+P/y9vr/+Pn7/+bn6/+5ttv/vLTc/9LT3f/Ewtj/w77h/7275P/Z4fD/4O74/9zt+v/P4vj/6u/z//D1+f/x9fn/7/T4/+3x9f/d4+z/wdf5/8rU6P/Z2uL/4+Tq/9DP3f/LyN//1+P0/9Lj9v/g7/v/4e/7/+bs8//q8Pf/6vD3/+/0+P/m6/H/1t3s/9Xl9f/NzOT/4uTq/+7v8v/29vj/xs7T/8DP0f/j6/L/4+nx/+bt9f/Z2Nf/2NTO/+Lh3f/s7/T/7PH2/8XC4P+zuuH/19Lo//Ly9f/y8/T/7e/x/9bc4P/c4+X/5O3y/+3y+P/t8/j/1NDR/7ypoP+/rpr/3t3d/+fr8//S0+b/cWa8/7av1P/9/fv/5erq/9ng5P/o7PH/9Pf5//D0+P/r8ff/7vP4/6SVyP+8rbf/qpa2/6aUu/++ttf/vr/o/6Kn5P+5x+v/4efu/+rv9f/p7/X/7vH1//D1+f/u8vX/6e3y/+zy+P+Hdsz/vLHT/7Sn1P+Rfsf/sabZ/6Sm5f+lr+D/ydz4/9vr9//Z2uv/09Hj//L1+P/r8ff/7fL4/+ju9f/q8fj/xsXi/7+36/+kluP/jX3i/7Ck3P+eouL/X1uU/9fm9//O4vn/srHY/8jB0P/t7/L/6/H3/+vx+P/q8ff/6vH3/5aJ4//AuPL/j4Hw/5SF6v/CuvL/qKjo/6i26P+puO7/lZ/J/5SNx//HwtT/8/T1/+3y+P/q8Pb/6vH4/+rx+P+Thun/lonv/4t9+f+lmO3/ubDu/7Cr7v+1sfH/pq7t/6eu5P+gldP/4+fy//L09//2+fv/6vD3/+rw+P/q8Pj/4+jz/5OH+v+UhvT/qZ3l/7Ws6P/Evvb/vrX0/7iw8v+6svD/wLrs/97h8P/2+fr/7fL4/+fs8v/v9Pj/6vD3/8zM8f+1sPf/4uf2/7Su4v+yqOv/x8D5/8S99/+8svX/vbbv/97g8f/q8Pf/9vn7/+/0+P/r7/T/7PL4/+zy+P/n7fT/6vH4/+rx+P/Oz/P/vbnu/9TU8v+8tu//oJTm/+Pm9P/s8fj/8PT4//T4+v/t8vj/6vD3//X3+v/09/r/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==" type="image/x-icon"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="main.css">
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-book"></i>
+            <span>小说阅读器</span>
+        </div>
+        <div class="controls">
+            <div class="font-controls">
+                <button id="decrease-font" title="减小字体">
+                    <i class="fas fa-font"></i>
+                    <span>A-</span>
+                </button>
+                <button id="reset-font" title="默认字体">
+                    <i class="fas fa-font"></i>
+                    <span>A</span>
+                </button>
+                <button id="increase-font" title="增大字体">
+                    <i class="fas fa-font"></i>
+                    <span>A+</span>
+                </button>
+            </div>
+            <button id="dark-mode-toggle" title="夜间模式">
+                <i class="fas fa-moon"></i>
+                <span>夜间模式</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <h3>
+                <i class="fas fa-list"></i>
+                <span>章节列表</span>
+            </h3>
+            <ul class="chapter-list" id="chapter-list">
+                <li class="chapter-item">请先加载配置</li>
+            </ul>
+        </div>
+
+        <div class="content" id="content">
+            <div class="progress-bar" id="progress-bar"></div>
+            <div class="loading" id="loading">
+                <i class="fas fa-book-open fa-2x" style="margin-bottom: 15px;"></i>
+                <p>请加载小说配置开始阅读</p>
+                <p style="font-size: 0.9rem; margin-top: 10px;">配置格式: {"章节名": "文件名.txt"}</p>
+            </div>
+            <div class="info-panel" id="info-panel" style="display: none;">
+                <span id="chapter-info">第0章 / 共0章</span>
+                <span id="progress-info">0%</span>
+            </div>
+            <h1 class="book-title" id="book-title"></h1>
+            <h2 class="chapter-title" id="chapter-title"></h2>
+            <div class="chapter-content" id="chapter-content"></div>
+            <div class="chapter-nav" id="chapter-nav" style="display: none;">
+                <button id="prev-chapter">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>上一章</span>
+                </button>
+                <button id="next-chapter">
+                    <span>下一章</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <button class="toggle-sidebar" id="toggle-sidebar">
+        <i class="fas fa-bars"></i>
+    </button>
+<script src="main.js"></script>
+</body>
+</html>
