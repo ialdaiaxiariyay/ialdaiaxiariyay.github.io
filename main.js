@@ -1,245 +1,398 @@
-        // 创建星光背景
+        // 启动日志模拟
+        const bootLines = [
+            "[   OK   ] 启动世界线变动率监测系统",
+            "[   OK   ] 加载时间线收敛算法",
+            "[   OK   ] 初始化Reading Steiner协议",
+            "[   OK   ] 验证用户身份... 用户: ialdaiaxiariyay",
+            "[   OK   ] 权限等级: 4 (世界线观测权限)",
+            "[   OK   ] 连接GitHub资料库...",
+            "[   OK   ] 加载模组开发环境",
+            "[   OK   ] 同步世界线时间戳",
+            "[   OK   ] 初始化辉光管显示模块",
+            "[   OK   ] 系统准备就绪，启动用户界面",
+            "",
+            "欢迎访问 ialdaiaxiariyay 的世界线观测站",
+            "当前世界线: Steins Gate (稳定)",
+            "世界线变动率: 1.048596 (±0.000001)",
+            "模组开发状态: 活跃",
+            "小说连载状态: 进行中",
+            "",
+            "正在加载观察者档案..."
+        ];
+        
+        const bootScreen = document.getElementById('boot-screen');
+        const bootLinesContainer = document.getElementById('boot-lines');
+        const bootStatus = document.getElementById('boot-status');
+        const mainContent = document.getElementById('main-content');
+        const worldlineValue = document.getElementById('worldline-value');
+        const currentTime = document.getElementById('current-time');
+        const accessTime = document.getElementById('access-time');
+        const starsContainer = document.getElementById('stars');
+        const mountainsContainer = document.getElementById('mountains');
+        const particleName = document.getElementById('particle-name');
+        
+        // 创建星空
         function createStars() {
-            const starsContainer = document.getElementById('stars');
             const starCount = 200;
             
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
-                star.classList.add('star');
+                star.className = 'star';
                 
-                // 随机大小和位置
-                const size = Math.random() * 3;
+                const size = Math.random() * 2 + 1;
                 star.style.width = `${size}px`;
                 star.style.height = `${size}px`;
-                star.style.left = `${Math.random() * 100}vw`;
-                star.style.top = `${Math.random() * 100}vh`;
                 
-                // 随机动画参数
-                star.style.setProperty('--duration', `${2 + Math.random() * 3}s`);
-                star.style.setProperty('--delay', `${Math.random() * 5}s`);
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                star.style.opacity = Math.random() * 0.5 + 0.3;
                 
                 starsContainer.appendChild(star);
             }
         }
         
-        // 创建悬浮山脉
+        // 创建山脉
         function createMountains() {
-            const canvas = document.getElementById('mountains');
-            const width = canvas.width = window.innerWidth;
-            const height = canvas.height = window.innerHeight * 0.3;
+            const mountainCount = 5;
+            const colors = ['#0a1a2a', '#0a2a3a', '#1a3a5a', '#2a4a6a', '#3a5a7a'];
             
-            // 绘制霓虹山脉
-            function drawMountains() {
+            for (let i = 0; i < mountainCount; i++) {
+                const mountain = document.createElement('div');
+                mountain.style.position = 'absolute';
+                mountain.style.bottom = '0';
+                mountain.style.width = `${20 + Math.random() * 30}%`;
+                mountain.style.height = `${30 + Math.random() * 40}%`;
+                mountain.style.left = `${i * (100 / mountainCount) - 10}%`;
+                mountain.style.backgroundColor = colors[i % colors.length];
+                mountain.style.clipPath = 'polygon(0% 100%, 50% 0%, 100% 100%)';
+                mountain.style.opacity = '0.6';
                 
-                // 绘制多道山脉
-                for (let i = 0; i < 3; i++) {
-                    const yBase = height - i * 40;
-                    const peakCount = 10 + i * 3;
-                    const peakHeight = 60 - i * 15;
-                    
-                    // 创建山峰点
-                    for (let j = 0; j < peakCount; j++) {
-                        const x = (width / (peakCount - 1)) * j;
-                        const noise = Math.random() * 20;
-                        const y = yBase - (peakHeight + noise);
-                        ctx.lineTo(x, y);
-                    }
-                    
-                    // 山脉渐变填充
-                    const gradient = ctx.createLinearGradient(0, yBase - peakHeight, 0, height);
-                    gradient.addColorStop(0, `rgba(157, 78, 221, ${0.1 - i * 0.03})`);
-                    gradient.addColorStop(1, `rgba(79, 255, 201, ${0.05 - i * 0.015})`);
-                
-                }
-            }
-            
-            drawMountains();
-            
-            // 响应窗口大小变化
-            window.addEventListener('resize', () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight * 0.3;
-                drawMountains();
-            });
-        }
-        
-        // 粒子系统 - 用于姓氏效果
-        class ParticleSystem {
-            constructor() {
-                this.particles = [];
-                this.container = document.getElementById('particles');
-                this.canopyName = document.querySelector('.name-canopy');
-                this.ripples = [];
-            }
-            
-            // 创建粒子流拼写姓氏
-            createNameParticles() {
-                const name = '';
-                const rect = this.canopyName.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-                
-                // 粒子起始位置（树根）
-                const rootRect = document.querySelector('.tree-root').getBoundingClientRect();
-                const startX = rootRect.left + rootRect.width / 2;
-                const startY = rootRect.top + rootRect.height;
-                
-                for (let i = 0; i < name.length; i++) {
-                    for (let j = 0; j < 15; j++) { // 每个字符多个粒子
-                        setTimeout(() => {
-                            const p = document.createElement('div');
-                            p.className = 'particle';
-                            p.innerText = name[i];
-                            p.style.position = 'fixed';
-                            p.style.left = `${startX}px`;
-                            p.style.top = `${startY}px`;
-                            p.style.color = `rgba(157, 78, 221, ${0.7 + Math.random() * 0.3})`;
-                            p.style.fontSize = `${18 + Math.random() * 10}px`;
-                            p.style.opacity = '0';
-                            p.style.transition = 'all 1.5s ease-out';
-                            p.style.zIndex = '10';
-                            p.style.pointerEvents = 'none';
-                            
-                            this.container.appendChild(p);
-                            
-                            // 粒子动画
-                            setTimeout(() => {
-                                const angle = Math.random() * Math.PI * 2;
-                                const radius = Math.random() * 100;
-                                const targetX = centerX - 100 + (i * 50) + Math.cos(angle) * radius;
-                                const targetY = centerY - 50 + Math.sin(angle) * radius;
-                                
-                                p.style.opacity = '1';
-                                p.style.transform = `translate(${targetX - startX}px, ${targetY - startY}px)`;
-                                
-                                // 粒子消失
-                                setTimeout(() => {
-                                    p.style.opacity = '0';
-                                    setTimeout(() => p.remove(), 1500);
-                                }, 2000);
-                            }, 100);
-                            
-                        }, i * 300 + j * 50);
-                    }
-                }
-            }
-            
-            // 创建金属花瓣
-            createPetalParticles() {
-                setInterval(() => {
-                    const petal = document.createElement('div');
-                    petal.className = 'petal';
-                    petal.innerHTML = '❖', '✦', '✧', '✶', '✷', '✸', '✹', '❈', '❉';
-                    petal.style.position = 'fixed';
-                    petal.style.left = `${Math.random() * 1000}vw`;
-                    petal.style.top = '-50px';
-                    petal.style.color = `rgba(79, 255, 201, ${0.7 + Math.random() * 0.3})`;
-                    petal.style.fontSize = `${16 + Math.random() * 10}px`;
-                    petal.style.opacity = '0.8';
-                    petal.style.zIndex = '8';
-                    petal.style.pointerEvents = 'none';
-                    petal.style.transition = 'transform 0.3s ease';
-                    
-                    this.container.appendChild(petal);
-                    
-                    // 花瓣飘落动画
-                    const duration = 5000 + Math.random() * 1000;
-                    const endY = window.innerHeight + 50;
-                    const endX = parseFloat(petal.style.left) + (Math.random() - 0.5) * 200;
-                    
-                    petal.style.transition = `left ${duration}ms linear, top ${duration}ms ease-in`;
-                    
-                    setTimeout(() => {
-                        petal.style.top = `${endY}px`;
-                        petal.style.left = `${endX}px`;
-                    }, 10);
-                    
-                    // 花瓣落地效果
-                    setTimeout(() => {
-                        this.createBinaryRipple(endX, endY);
-                        petal.remove();
-                    }, duration + 100);
-                }, 800);
-            }
-            
-            // 创建二进制涟漪
-            createBinaryRipple(x, y) {
-                const ripple = document.createElement('div');
-                ripple.className = 'binary-ripple';
-                ripple.style.left = `${x}px`;
-                ripple.style.top = `${y}px`;
-                ripple.style.width = '0px';
-                ripple.style.height = '0px';
-                
-                this.container.appendChild(ripple);
-                
-                // 涟漪动画
-                let size = 0;
-                const maxSize = 100 + Math.random() * 150;
-                const growthRate = 8;
-                const binaryChars = ['0', '1', '#', '*', '&', '%', '$', '@'];
-                
-                const animateRipple = () => {
-                    size += growthRate;
-                    ripple.style.width = `${size}px`;
-                    ripple.style.height = `${size}px`;
-                    
-                    // 在涟漪边缘添加二进制字符
-                    if (size % 20 < growthRate) {
-                        const char = document.createElement('div');
-                        char.className = 'binary-char';
-                        char.innerText = binaryChars[Math.floor(Math.random() * binaryChars.length)];
-                        char.style.position = 'fixed';
-                        char.style.left = `${x + size * Math.cos(Math.random() * Math.PI * 2)}px`;
-                        char.style.top = `${y + size * Math.sin(Math.random() * Math.PI * 2)}px`;
-                        char.style.color = `rgba(79, 255, 201, ${1 - size/maxSize})`;
-                        char.style.fontSize = '12px';
-                        char.style.zIndex = '9';
-                        char.style.pointerEvents = 'none';
-                        
-                        this.container.appendChild(char);
-                        
-                        // 字符消失
-                        setTimeout(() => {
-                            char.style.opacity = '0';
-                            setTimeout(() => char.remove(), 500);
-                        }, 500);
-                    }
-                    
-                    ripple.style.opacity = `${1 - size/maxSize}`;
-                    
-                    if (size < maxSize) {
-                        requestAnimationFrame(animateRipple);
-                    } else {
-                        ripple.remove();
-                    }
-                };
-                
-                animateRipple();
+                mountainsContainer.appendChild(mountain);
             }
         }
         
-        // 初始化页面
-        document.addEventListener('DOMContentLoaded', () => {
-            createStars();
-            
-            const particleSystem = new ParticleSystem();
-            particleSystem.createNameParticles();
-            particleSystem.createPetalParticles();
-            
-            // 添加交互效果：点击名字触发特效
-            const rootName = document.querySelector('.name-root');
-            rootName.addEventListener('click', () => {
-                // 添加发光脉冲特效
-                rootName.style.animation = 'none';
+        // 模拟启动过程
+        let currentLine = 0;
+        
+        function typeBootLine() {
+            if (currentLine < bootLines.length) {
+                const line = document.createElement('div');
+                line.className = 'boot-line';
+                line.textContent = bootLines[currentLine];
+                bootLinesContainer.appendChild(line);
+                
+                // 如果是空行，添加间距
+                if (bootLines[currentLine] === "") {
+                    line.style.marginBottom = "1rem";
+                }
+                
+                currentLine++;
+                
+                // 滚动到底部
+                bootScreen.scrollTop = bootScreen.scrollHeight;
+                
+                // 随机延迟，模拟打字效果
+                const delay = bootLines[currentLine-1] === "" ? 300 : Math.random() * 100 + 50;
+                setTimeout(typeBootLine, delay);
+            } else {
+                // 启动完成，显示主界面
                 setTimeout(() => {
-                    rootName.style.animation = 'glow-pulse 4s infinite alternate';
-                }, 10);
+                    bootStatus.textContent = "启动完成，正在进入主界面...";
+                    setTimeout(() => {
+                        bootScreen.style.opacity = '0';
+                        setTimeout(() => {
+                            bootScreen.style.display = 'none';
+                            mainContent.style.display = 'grid';
+                            // 开始背景动画
+                            initNixieTubes();
+                            startWorldlineAnimation();
+                            createParticles();
+                            updateCurrentTime();
+                            setInterval(updateCurrentTime, 1000);
+                        }, 500);
+                    }, 1000);
+                }, 500);
+            }
+        }
+        
+        // 开始启动模拟
+        setTimeout(() => {
+            createStars();
+            createMountains();
+            typeBootLine();
+        }, 500);
+        
+        // 辉光管世界线变动器
+        let nixieCanvas, nixieCtx;
+        let nixieTubes = [];
+        let worldline = 1.048596;
+        
+        function initNixieTubes() {
+            nixieCanvas = document.getElementById('nixie-tubes');
+            nixieCtx = nixieCanvas.getContext('2d');
+            
+            // 设置canvas尺寸
+            function resizeCanvas() {
+                nixieCanvas.width = window.innerWidth;
+                nixieCanvas.height = window.innerHeight;
+            }
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // 创建辉光管
+            const tubeCount = Math.floor(window.innerWidth / 100);
+            for (let i = 0; i < tubeCount; i++) {
+                nixieTubes.push({
+                    x: Math.random() * nixieCanvas.width,
+                    y: Math.random() * nixieCanvas.height,
+                    width: 60,
+                    height: 100,
+                    value: Math.floor(Math.random() * 10),
+                    glow: Math.random() * 0.5 + 0.5,
+                    glowSpeed: Math.random() * 0.02 + 0.01,
+                    color: Math.random() > 0.5 ? 'orange' : 'blue'
+                });
+            }
+            
+            // 开始动画
+            animateNixieTubes();
+        }
+        
+        function animateNixieTubes() {
+            nixieCtx.fillStyle = 'rgba(10, 10, 10, 0.05)';
+            nixieCtx.fillRect(0, 0, nixieCanvas.width, nixieCanvas.height);
+            
+            // 绘制辉光管
+            nixieTubes.forEach(tube => {
+                // 更新辉光效果
+                tube.glow += tube.glowSpeed;
+                if (tube.glow > 1) tube.glow = 0;
                 
-                // 创建点击位置的涟漪
-                particleSystem.createBinaryRipple(
-                    rootName.getBoundingClientRect().left + rootName.offsetWidth / 2,
-                    rootName.getBoundingClientRect().top + rootName.offsetHeight / 2
-                );
+                // 偶尔改变数字
+                if (Math.random() < 0.005) {
+                    tube.value = Math.floor(Math.random() * 10);
+                }
+                
+                // 绘制辉光管外框
+                nixieCtx.fillStyle = 'rgba(30, 30, 30, 0.8)';
+                nixieCtx.fillRect(tube.x, tube.y, tube.width, tube.height);
+                
+                // 绘制辉光
+                const glowIntensity = 0.3 + 0.7 * Math.abs(Math.sin(tube.glow * Math.PI));
+                nixieCtx.shadowColor = tube.color === 'orange' ? 'rgba(255, 153, 0, 0.8)' : 'rgba(0, 170, 255, 0.8)';
+                nixieCtx.shadowBlur = 20 * glowIntensity;
+                
+                // 绘制数字
+                nixieCtx.fillStyle = tube.color === 'orange' ? 
+                    `rgba(255, 200, 0, ${glowIntensity})` : 
+                    `rgba(100, 200, 255, ${glowIntensity})`;
+                nixieCtx.font = 'bold 60px "Courier New", monospace';
+                nixieCtx.textAlign = 'center';
+                nixieCtx.textBaseline = 'middle';
+                nixieCtx.fillText(tube.value, tube.x + tube.width/2, tube.y + tube.height/2);
+                
+                // 重置阴影
+                nixieCtx.shadowBlur = 0;
+                
+                // 绘制辉光管细节
+                nixieCtx.strokeStyle = 'rgba(100, 100, 100, 0.5)';
+                nixieCtx.lineWidth = 2;
+                nixieCtx.strokeRect(tube.x, tube.y, tube.width, tube.height);
             });
+            
+            requestAnimationFrame(animateNixieTubes);
+        }
+        
+        // 世界线数值动画
+        function startWorldlineAnimation() {
+            function updateWorldline() {
+                // 添加微小波动
+                const fluctuation = (Math.random() - 0.5) * 0.000002;
+                worldline += fluctuation;
+                
+                // 确保世界线在合理范围内
+                if (worldline < 1.048590) worldline = 1.048590;
+                if (worldline > 1.048602) worldline = 1.048602;
+                
+                // 更新显示
+                worldlineValue.textContent = worldline.toFixed(6);
+                
+                // 根据波动改变颜色
+                if (fluctuation > 0) {
+                    worldlineValue.style.color = '#00ff41';
+                    worldlineValue.style.textShadow = '0 0 10px #00ff41';
+                } else if (fluctuation < 0) {
+                    worldlineValue.style.color = '#ff0040';
+                    worldlineValue.style.textShadow = '0 0 10px #ff0040';
+                } else {
+                    worldlineValue.style.color = '#ff9900';
+                    worldlineValue.style.textShadow = '0 0 10px #ff9900';
+                }
+                
+                // 随机间隔更新
+                setTimeout(updateWorldline, Math.random() * 2000 + 1000);
+            }
+            
+            updateWorldline();
+        }
+        
+        // 粒子效果
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            const name = particleName.textContent;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.color = i % 3 === 0 ? '#00ff41' : i % 3 === 1 ? '#00d9ff' : '#ff00ff';
+                particle.style.fontSize = `${Math.random() * 10 + 10}px`;
+                particle.style.opacity = Math.random() * 0.5 + 0.2;
+                particle.style.userSelect = 'none';
+                particle.style.pointerEvents = 'none';
+                
+                // 随机选择一个字符
+                const charIndex = Math.floor(Math.random() * name.length);
+                particle.textContent = name[charIndex];
+                
+                // 初始位置
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                particlesContainer.appendChild(particle);
+                
+                // 动画
+                animateParticle(particle);
+            }
+        }
+        
+        function animateParticle(particle) {
+            let x = parseFloat(particle.style.left);
+            let y = parseFloat(particle.style.top);
+            let xSpeed = (Math.random() - 0.5) * 0.5;
+            let ySpeed = (Math.random() - 0.5) * 0.5;
+            let opacity = parseFloat(particle.style.opacity);
+            let opacityDirection = Math.random() > 0.5 ? 0.01 : -0.01;
+            
+            function move() {
+                x += xSpeed;
+                y += ySpeed;
+                
+                // 边界检查
+                if (x < 0 || x > 100) xSpeed *= -1;
+                if (y < 0 || y > 100) ySpeed *= -1;
+                
+                // 透明度变化
+                opacity += opacityDirection;
+                if (opacity < 0.1 || opacity > 0.6) {
+                    opacityDirection *= -1;
+                }
+                
+                particle.style.left = `${x}%`;
+                particle.style.top = `${y}%`;
+                particle.style.opacity = opacity;
+                
+                requestAnimationFrame(move);
+            }
+            
+            move();
+        }
+        
+        // 更新当前时间
+        function updateCurrentTime() {
+            const now = new Date();
+            const formattedTime = now.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            currentTime.textContent = formattedTime;
+            accessTime.textContent = formattedTime;
+        }
+        
+        // 项目信息弹窗
+        function showProjectInfo(projectId) {
+            let title = '';
+            let description = '';
+            
+            switch(projectId) {
+                case 'archive':
+                    title = '世界线档案馆';
+                    description = '一个用于记录和分析世界线变动数据的Web应用。系统可以可视化不同世界线之间的变动轨迹，分析世界线收束点，并预测未来可能的世界线分支。该档案馆使用辉光管风格UI，数据通过加密协议传输，确保观测数据的安全性。';
+                    break;
+            }
+            
+            alert(`${title}\n\n${description}`);
+        }
+        
+        // 机械树交互
+        const tree = document.getElementById('tree');
+        tree.addEventListener('click', () => {
+            const name = particleName.textContent;
+            const letters = name.split('');
+            
+            // 创建文字粒子爆炸效果
+            letters.forEach((letter, index) => {
+                const particle = document.createElement('div');
+                particle.textContent = letter;
+                particle.style.position = 'fixed';
+                particle.style.color = '#00d9ff';
+                particle.style.fontSize = '24px';
+                particle.style.fontFamily = 'Orbitron, sans-serif';
+                particle.style.fontWeight = 'bold';
+                particle.style.textShadow = '0 0 10px #00d9ff';
+                particle.style.zIndex = '10000';
+                particle.style.left = '50%';
+                particle.style.top = '50%';
+                particle.style.transform = 'translate(-50%, -50%)';
+                particle.style.pointerEvents = 'none';
+                
+                document.body.appendChild(particle);
+                
+                // 动画
+                const angle = (index / letters.length) * Math.PI * 2;
+                const distance = 200;
+                const targetX = Math.cos(angle) * distance;
+                const targetY = Math.sin(angle) * distance;
+                
+                let progress = 0;
+                const duration = 1000;
+                const startTime = Date.now();
+                
+                function animate() {
+                    const currentTime = Date.now();
+                    progress = (currentTime - startTime) / duration;
+                    
+                    if (progress < 1) {
+                        const x = targetX * progress;
+                        const y = targetY * progress;
+                        const opacity = 1 - progress;
+                        
+                        particle.style.left = `calc(50% + ${x}px)`;
+                        particle.style.top = `calc(50% + ${y}px)`;
+                        particle.style.opacity = opacity;
+                        
+                        requestAnimationFrame(animate);
+                    } else {
+                        document.body.removeChild(particle);
+                    }
+                }
+                
+                animate();
+            });
+            
+            // 恢复原状
+            setTimeout(() => {
+                particleName.style.animation = 'none';
+                setTimeout(() => {
+                    particleName.style.animation = 'pulse 2s infinite';
+                }, 10);
+            }, 1000);
         });
