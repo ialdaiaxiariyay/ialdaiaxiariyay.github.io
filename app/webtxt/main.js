@@ -64,6 +64,12 @@
             }
         }
 
+        function fetchWithCacheBuster(url) {
+            const separator = url.includes('?') ? '&' : '?';
+            return fetch(`${url}${separator}_t=${Date.now()}`);
+        }
+
+
         // 从URL加载配置
         function loadConfigFromUrl() {
             const url = "./config.json";
@@ -79,42 +85,30 @@
             infoPanel.style.display = 'none';
             document.getElementById('chapter-nav').style.display = 'none';
 
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('网络响应不正常');
-                    }
-                    return response.json();
-                })
-                .then(config => {
-                    // 获取基础URL（配置文件所在目录）
-                    const baseUrl = "./txt/";
-                    
-                    // 加载所有章节内容
-                    loadAllChapters(config, baseUrl);
-                })
-                .catch(error => {
-                    console.error('加载配置失败:', error);
-                    alert('加载配置失败，请检查链接是否正确');
-                    loading.style.display = 'none';
-                });
+            fetchWithCacheBuster(url)
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return response.json();
+            })
+            .then(config => {
+                const baseUrl = './txt/'; // 可根据需要从 config 中获取
+                loadAllChapters(config, baseUrl);
+            })
+            .catch(error => {
+                loading.innerHTML = `<p style="color:red;">加载配置失败: ${error.message}</p>`;
+            });
         }
 
         // 加载所有章节内容
         function loadAllChapters(config, baseUrl) {
             const chapterFiles = Object.values(config);
             const chapterPromises = chapterFiles.map(file => 
-                fetch(baseUrl + file)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`无法加载文件: ${file}`);
-                        }
-                        return response.text();
-                    })
-                    .catch(error => {
-                        console.error(`加载章节失败: ${file}`, error);
-                        return `加载失败: ${error.message}`;
-                    })
+                fetchWithCacheBuster(baseUrl + file)
+                .then(response => {
+                    if (!response.ok) throw new Error(`无法加载文件: ${file}`);
+                    return response.text();
+                })
+                .catch(error => `【加载失败】${file}: ${error.message}`)
             );
 
             Promise.all(chapterPromises)
@@ -300,10 +294,10 @@
         function updateProgress() {
             const scrollTop = content.scrollTop;
             const scrollHeight = content.scrollHeight - content.clientHeight;
-            const scrollPercentage = scrollHeight > 0 ? Math.round((scrollTop / scrollHeight) * 100) : 0;
-            
-            progressBar.style.width = `${scrollPercentage}%`;
-            progressInfo.textContent = `${scrollPercentage}%`;
+            const maxScroll = scrollHeight > 0 ? scrollHeight : 1;
+            const scrollPercentage = Math.min(100, Math.max(0, Math.round((scrollTop / maxScroll) * 100)));
+            progressBar.style.width = scrollPercentage + '%';
+            progressInfo.textContent = scrollPercentage + '%';
         }
 
         // 初始化应用
